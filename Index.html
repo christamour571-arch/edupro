@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EDUPRO</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#07152e;color:white;font-family:Arial,sans-serif}
+header{background:#102e60;padding:22px;text-align:center}
+header h1{color:#42c8ff;margin:0}
+header p{color:#b8dfff}
+main{padding:16px;max-width:650px;margin:auto}
+.card{background:#122b50;padding:17px;margin:12px 0;border-radius:13px;border:1px solid #28517c}
+button{background:#087fd0;color:white;border:0;padding:12px;border-radius:9px;margin:5px;cursor:pointer}
+input,select{width:100%;padding:12px;margin:7px 0;border-radius:8px;border:0}
+h2{color:#42c8ff}
+.lecon{background:#193b67;padding:13px;border-radius:10px;margin:10px 0}
+.hidden{display:none}
+footer{text-align:center;color:#9db6d2;padding:20px}
+</style>
+</head>
+<body>
+<header>
+<h1>EDUPRO</h1>
+<p>Apprendre aujourd'hui, réussir demain.</p>
+</header>
+
+<main>
+<section id="connexion" class="card">
+<h2>Bienvenue sur EDUPRO</h2>
+<input id="nom" placeholder="Ton nom">
+<input id="classe" placeholder="Ta classe (ex : 4e)">
+<button onclick="entrer()">Se connecter</button>
+</section>
+
+<section id="accueil" class="hidden">
+<div class="card">
+<h2 id="bienvenue"></h2>
+<p>Bienvenue dans ton espace éducatif !</p>
+</div>
+
+<div class="card">
+<h2>Menu principal</h2>
+<button onclick="afficher('cours')">📚 Mes cours</button>
+<button onclick="afficher('exercices')">✏️ Exercices</button>
+<button onclick="afficher('quiz')">🧠 Quiz</button>
+<button onclick="afficher('resultats')">🏆 Résultats</button>
+<button onclick="afficher('profil')">👤 Mon profil</button>
+<button onclick="afficher('notifications')">🔔 Notifications</button>
+</div>
+</section>
+
+<section id="cours" class="hidden">
+<div class="card">
+<h2>📚 Bibliothèque de cours</h2>
+<p>Choisis une matière :</p>
+<button onclick="matiere('francais')">Français</button>
+<button onclick="matiere('maths')">Mathématiques</button>
+<button onclick="matiere('anglais')">Anglais</button>
+<button onclick="matiere('histoire')">Histoire-Géographie</button>
+<div id="contenuCours"></div>
+</div>
+<button onclick="retour()">⬅ Retour</button>
+</section>
+
+<section id="exercices" class="hidden card">
+<h2>✏️ Exercice de mathématiques</h2>
+<p>Combien font 12 × 5 ?</p>
+<input id="reponse" type="number" placeholder="Ta réponse">
+<button onclick="corriger()">Vérifier</button>
+<p id="correction"></p>
+<button onclick="retour()">⬅ Retour</button>
+</section>
+
+<section id="quiz" class="hidden card">
+<h2>🧠 Quiz de connaissances</h2>
+<p>Quelle est la capitale du Gabon ?</p>
+<button onclick="quiz('Libreville')">Libreville</button>
+<button onclick="quiz('Port-Gentil')">Port-Gentil</button>
+<button onclick="quiz('Franceville')">Franceville</button>
+<p id="resultatQuiz"></p>
+<button onclick="retour()">⬅ Retour</button>
+</section>
+
+<section id="resultats" class="hidden card">
+<h2>🏆 Mes résultats</h2>
+<p>Mes points : <strong id="points">0</strong></p>
+<button onclick="retour()">⬅ Retour</button>
+</section>
+
+<section id="profil" class="hidden card">
+<h2>👤 Mon profil</h2>
+<p id="profilNom"></p>
+<p id="profilClasse"></p>
+<button onclick="retour()">⬅ Retour</button>
+</section>
+
+<section id="notifications" class="hidden card">
+<h2>🔔 Notifications</h2>
+<p>Bienvenue sur EDUPRO !</p>
+<p>Continue à apprendre chaque jour.</p>
+<button onclick="retour()">⬅ Retour</button>
+</section>
+</main>
+
+<footer>EDUPRO © 2026</footer>
+
+<script>
+let utilisateur="";
+let niveau="";
+let score=0;
+
+function entrer(){
+utilisateur=document.getElementById("nom").value.trim();
+niveau=document.getElementById("classe").value.trim();
+if(!utilisateur||!niveau){
+alert("Remplis ton nom et ta classe.");
+return;
+}
+document.getElementById("connexion").classList.add("hidden");
+document.getElementById("accueil").classList.remove("hidden");
+document.getElementById("bienvenue").textContent="Bonjour "+utilisateur+" !";
+document.getElementById("profilNom").textContent="Nom : "+utilisateur;
+document.getElementById("profilClasse").textContent="Classe : "+niveau;
+}
+
+function afficher(id){
+document.getElementById("accueil").classList.add("hidden");
+document.getElementById(id).classList.remove("hidden");
+}
+
+function retour(){
+document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));
+document.getElementById("accueil").classList.remove("hidden");
+}
+
+function matiere(nom){
+let textes={
+francais:"<h3>Le français : la grammaire</h3><p>La grammaire étudie les règles de la langue. Une phrase commence par une majuscule et se termine par un signe de ponctuation.</p><div class='lecon'><b>Le sujet :</b> Il indique qui fait l'action.<br><b>Le verbe :</b> Il indique l'action ou l'état.<br><b>Le complément :</b> Il apporte des précisions.</div>",
+maths:"<h3>Les mathématiques : les fractions</h3><p>Une fraction représente une partie d'un tout.</p><div class='lecon'><b>Exemple :</b> 1/2 signifie une partie sur deux parties égales.<br>Dans 3/4, 3 est le numérateur et 4 le dénominateur.</div>",
+anglais:"<h3>Anglais : les pronoms personnels</h3><div class='lecon'>I = Je<br>You = Tu ou vous<br>He = Il<br>She = Elle<br>It = Il ou elle pour une chose ou un animal<br>We = Nous<br>They = Ils ou elles</div>",
+histoire:"<h3>Histoire-Géographie : le Gabon</h3><div class='lecon'>Le Gabon est un pays situé en Afrique centrale. Sa capitale est Libreville. Il compte neuf provinces. Sa fête nationale est célébrée le 17 août.</div>"
+};
+document.getElementById("contenuCours").innerHTML=textes[nom];
+}
+
+function corriger(){
+let r=document.getElementById("reponse").value;
+if(r==="60"){
+document.getElementById("correction").textContent="Bravo ! Bonne réponse.";
+score+=10;
+}else{
+document.getElementById("correction").textContent="Essaie encore. 12 × 5 = 60.";
+}
+document.getElementById("points").textContent=score;
+}
+
+function quiz(r){
+if(r==="Libreville"){
+document.getElementById("resultatQuiz").textContent="Bravo ! Bonne réponse.";
+score+=10;
+}else{
+document.getElementById("resultatQuiz").textContent="Pas tout à fait. La bonne réponse est Libreville.";
+}
+document.getElementById("points").textContent=score;
+}
+</script>
+</body>
+</html>
